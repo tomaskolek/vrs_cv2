@@ -74,6 +74,14 @@ int main(void)
   GPIOA->OTYPER &= ~((uint16_t)(1<<5));
   GPIOA->PUPDR |= (0b01) << (5*2);
   GPIOA->OSPEEDR |= (0b11) << (5*2);
+
+  while(1){
+	  //LEDka
+	  GPIOA->ODR |= 0b0000000000100000; //LEDka svieti
+	  GPIOA->ODR &= ~(0b0000000000100000); //LEDka nesvieti
+	  GPIOA->BSRRL |= ((uint16_t)(1<<5)); //LEDka svieti
+	  GPIOA->BSRRH |= ((uint16_t)(1<<5)); //LEDka nesvieti
+  }
   return 0;
 }
 
