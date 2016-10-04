@@ -28,14 +28,14 @@
 /** @addtogroup Template_Project
   * @{
   */
-
+#define USER_BUTTON_EXTI_LINE          EXTI_Line13
+extern uint8_t BlinkSpeed;
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
-
 /******************************************************************************/
 /*            Cortex-M3 Processor Exceptions Handlers                         */
 /******************************************************************************/
@@ -48,6 +48,7 @@
 void NMI_Handler(void)
 {
 }
+
 
 /**
   * @brief  This function handles Hard Fault exception.
@@ -115,6 +116,7 @@ void SVC_Handler(void)
   * @param  None
   * @retval None
   */
+
 void DebugMon_Handler(void)
 {
 }
@@ -140,6 +142,44 @@ void SysTick_Handler(void)
   TimingDelay_Decrement();
 #endif
 }
+
+/*ITStatus EXTI_GetITStatus(uint32_t EXTI_Line)
+{
+  ITStatus bitstatus = RESET;
+  uint32_t enablestatus = 0;
+
+  assert_param(IS_GET_EXTI_LINE(EXTI_Line));
+
+  enablestatus =  EXTI->IMR & EXTI_Line;
+  if (((EXTI->PR & EXTI_Line) != (uint32_t)RESET) && (enablestatus != (uint32_t)RESET))
+  {
+    bitstatus = SET;
+  }
+  else
+  {
+    bitstatus = RESET;
+  }
+  return bitstatus;
+}*/
+
+void EXTI15_10_IRQHandler(void)
+{
+  if ((EXTI_GetITStatus(USER_BUTTON_EXTI_LINE) != RESET))
+  {
+    if(BlinkSpeed == 1)
+    {
+      BlinkSpeed = 0;
+
+    }
+    else
+    {
+      BlinkSpeed ++;
+    }
+    /* Clear the EXTI line pending bit */
+    EXTI_ClearITPendingBit(USER_BUTTON_EXTI_LINE);
+  }
+}
+
 
 /******************************************************************************/
 /*                 STM32L1xx Peripherals Interrupt Handlers                   */

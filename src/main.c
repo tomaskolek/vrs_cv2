@@ -30,15 +30,11 @@ SOFTWARE.
 #include <stddef.h>
 #include "stm32l1xx.h"
 
-
 /* Private typedef */
 /* Private define  */
 /* Private macro */
 /* Private variables */
 /* Private function prototypes */
-/* Private functions */
-
-
 /**
 **===========================================================================
 **
@@ -46,9 +42,12 @@ SOFTWARE.
 **
 **===========================================================================
 */
+
+
 int main(void)
 {
   int i = 0;
+
 
   /**
   *  IMPORTANT NOTE!
@@ -69,19 +68,25 @@ int main(void)
 
   /* TODO - Add your application code here */
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
+/////////   Uloha 1   /////////////////////////////////////////////
 
   GPIOA->MODER |= (0b01) << (5*2);
   GPIOA->OTYPER &= ~((uint16_t)(1<<5));
   GPIOA->PUPDR |= (0b01) << (5*2);
   GPIOA->OSPEEDR |= (0b11) << (5*2);
 
-  while(1){
-	  //LEDka
-	  GPIOA->ODR |= 0b0000000000100000; //LEDka svieti
-	  GPIOA->ODR &= ~(0b0000000000100000); //LEDka nesvieti
-	  GPIOA->BSRRL |= ((uint16_t)(1<<5)); //LEDka svieti
-	  GPIOA->BSRRH |= ((uint16_t)(1<<5)); //LEDka nesvieti
-  }
+
+  GPIOA->ODR |= 0b0000000000100000; //LEDka svieti
+  GPIOA->ODR &= ~(0b0000000000100000); //LEDka nesvieti
+  GPIOA->BSRRL |= ((uint16_t)(1<<5)); //LEDka svieti
+  GPIOA->BSRRH |= ((uint16_t)(1<<5)); //LEDka nesvieti
+
+  GPIOA->ODR ^= (1<<5); //prepinam - mala by byt vypnuta
+  GPIOA->ODR ^= (1<<5); //prepinam - mala by svietit
+  GPIOA->ODR ^= (1<<5); // prepinam - vypnuta
+  GPIOA->ODR ^= (1<<5); // prepinam - svieti
+
+
   return 0;
 }
 
@@ -115,6 +120,8 @@ void __assert_func(const char *file, int line, const char *func, const char *fai
   {}
 }
 
+
+
 /*
  * Minimal __assert() uses __assert__func()
  * */
@@ -122,3 +129,4 @@ void __assert(const char *file, int line, const char *failedexpr)
 {
    __assert_func (file, line, NULL, failedexpr);
 }
+
