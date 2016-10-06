@@ -131,7 +131,7 @@ int main(void)
   }*/
 //////////////////////////////////////////////////////////////////////
  ///////////////    Uloha 3, prva cast  ////////////////////////////////////
-    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
+   /* RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
     GPIOA->MODER |= (0b01) << (5*2);
     GPIOA->OTYPER &= ~((uint16_t)(1<<5));
     GPIOA->PUPDR |= (0b01) << (5*2);
@@ -157,6 +157,27 @@ int main(void)
     		}
     }
  ///////////////////////////////////////////
+  * */
+  //////////////////////////////////////////////////////////////////////
+   ///////////////    Uloha 3, druha cast  ////////////////////////////////////
+  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
+  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
+      GPIOA->MODER |= (0b01) << (5*2);
+      GPIOA->OTYPER &= ~((uint16_t)(1<<5));
+      GPIOA->PUPDR |= (0b01) << (5*2);
+      GPIOA->OSPEEDR |= (0b11) << (5*2);
+      GPIOC->MODER |= (0b00) << (13*2);
+      GPIOC->OTYPER &= ~((uint16_t)(1<<13));
+      GPIOC->PUPDR |= (0b00) << (13*2);
+
+      while(1){
+          	if ((GPIOC->IDR & (0b0010000000000000)) == 0)
+        		 GPIOA->ODR |= 0b0000000000100000; //LEDka svieti
+        	 else if ((GPIOC->IDR & (0b0010000000000000)) == (pow(2,13)))
+        		 GPIOA->BSRRH |= ((uint16_t)(1<<5)); //LEDka nesvieti
+
+          }
+
   return 0;
 }
 
