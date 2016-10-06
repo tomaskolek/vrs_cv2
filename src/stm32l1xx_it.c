@@ -162,23 +162,7 @@ void SysTick_Handler(void)
   return bitstatus;
 }*/
 
-void EXTI15_10_IRQHandler(void)
-{
-  if ((EXTI_GetITStatus(USER_BUTTON_EXTI_LINE) != RESET))
-  {
-    if(BlinkSpeed == 1)
-    {
-      BlinkSpeed = 0;
 
-    }
-    else
-    {
-      BlinkSpeed ++;
-    }
-    /* Clear the EXTI line pending bit */
-    EXTI_ClearITPendingBit(USER_BUTTON_EXTI_LINE);
-  }
-}
 
 
 /******************************************************************************/

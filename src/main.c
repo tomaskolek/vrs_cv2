@@ -29,7 +29,7 @@ SOFTWARE.
 /* Includes */
 #include <stddef.h>
 #include "stm32l1xx.h"
-
+#include <math.h>
 /* Private typedef */
 /* Private define  */
 /* Private macro */
@@ -47,7 +47,7 @@ SOFTWARE.
 int main(void)
 {
   int i = 0;
-
+  int BUTTON;
 
   /**
   *  IMPORTANT NOTE!
@@ -67,9 +67,10 @@ int main(void)
   */
 
   /* TODO - Add your application code here */
-  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
-/////////   Uloha 1   /////////////////////////////////////////////
 
+/////////   Uloha 1   /////////////////////////////////////////////
+/*
+ *RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
   GPIOA->MODER |= (0b01) << (5*2);
   GPIOA->OTYPER &= ~((uint16_t)(1<<5));
   GPIOA->PUPDR |= (0b01) << (5*2);
@@ -84,9 +85,23 @@ int main(void)
   GPIOA->ODR ^= (1<<5); //prepinam - mala by byt vypnuta
   GPIOA->ODR ^= (1<<5); //prepinam - mala by svietit
   GPIOA->ODR ^= (1<<5); // prepinam - vypnuta
-  GPIOA->ODR ^= (1<<5); // prepinam - svieti
+  GPIOA->ODR ^= (1<<5); // prepinam - svieti*/
 
+/////////   Uloha 2   /////////////////////////////////////////////
+  	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
+    GPIOC->MODER |= (0b00) << (13*2);
+    GPIOC->OTYPER &= ~((uint16_t)(1<<13));
+    GPIOC->PUPDR |= (0b00) << (13*2);
 
+    while(1){
+    	i++;
+  	 if ((GPIOC->IDR & (0b0010000000000000)) == 0)
+  	   BUTTON = 1;
+  	 else if ((GPIOC->IDR & (0b0010000000000000)) == (pow(2,13)))
+  	   BUTTON = 0;
+
+    }
+/////////////////////////////////////////////////////////////////
   return 0;
 }
 
