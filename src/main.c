@@ -88,7 +88,7 @@ int main(void)
   GPIOA->ODR ^= (1<<5); // prepinam - svieti*/
 
 /////////   Uloha 2   /////////////////////////////////////////////
-  	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
+  	/*RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
     GPIOC->MODER |= (0b00) << (13*2);
     GPIOC->OTYPER &= ~((uint16_t)(1<<13));
     GPIOC->PUPDR |= (0b00) << (13*2);
@@ -101,7 +101,36 @@ int main(void)
   	   BUTTON = 0;
 
     }
-/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////*/
+  /// Uloha 1 s pouzitim kniznice /////////
+  /*RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
+  GPIO_InitTypeDef struktura;
+  struktura.GPIO_Mode = GPIO_Mode_OUT;
+  struktura.GPIO_OType = GPIO_OType_PP;
+  struktura.GPIO_PuPd = GPIO_PuPd_UP;
+  struktura.GPIO_Pin = GPIO_Pin_5;
+  struktura.GPIO_Speed = GPIO_Speed_40MHz;
+  GPIO_Init(GPIOA, &struktura);
+  while (1){
+	  GPIO_ToggleBits(GPIOA, GPIO_Pin_5);
+  }*/
+  /////////////////////////////////////////////////////////////////*/
+    /// Uloha 2 s pouzitim kniznice /////////
+  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
+  GPIO_InitTypeDef struktura;
+  struktura.GPIO_Mode = GPIO_Mode_IN;
+  struktura.GPIO_PuPd = GPIO_PuPd_NOPULL;
+  struktura.GPIO_OType = GPIO_OType_PP;
+  struktura.GPIO_Pin = GPIO_Pin_13;
+  while(1){
+	  if ((GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13)) == 0){
+		  BUTTON = 1;
+	  }
+	  else if ((GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13)) == 1 ){
+		  BUTTON = 0;
+	  }
+  }
+//////////////////////////////////////////////////////////////////////
   return 0;
 }
 
