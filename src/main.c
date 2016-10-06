@@ -46,7 +46,6 @@ SOFTWARE.
 
 int main(void)
 {
-  int i = 0;
   int BUTTON;
 
   /**
@@ -70,7 +69,7 @@ int main(void)
 
 /////////   Uloha 1   /////////////////////////////////////////////
 /*
- *RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
+  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
   GPIOA->MODER |= (0b01) << (5*2);
   GPIOA->OTYPER &= ~((uint16_t)(1<<5));
   GPIOA->PUPDR |= (0b01) << (5*2);
@@ -115,8 +114,8 @@ int main(void)
 	  GPIO_ToggleBits(GPIOA, GPIO_Pin_5);
   }*/
   /////////////////////////////////////////////////////////////////*/
-    /// Uloha 2 s pouzitim kniznice /////////
-  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
+  /// Uloha 2 s pouzitim kniznice /////////
+  /*RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
   GPIO_InitTypeDef struktura;
   struktura.GPIO_Mode = GPIO_Mode_IN;
   struktura.GPIO_PuPd = GPIO_PuPd_NOPULL;
@@ -129,8 +128,35 @@ int main(void)
 	  else if ((GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13)) == 1 ){
 		  BUTTON = 0;
 	  }
-  }
+  }*/
 //////////////////////////////////////////////////////////////////////
+ ///////////////    Uloha 3, prva cast  ////////////////////////////////////
+    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
+    GPIOA->MODER |= (0b01) << (5*2);
+    GPIOA->OTYPER &= ~((uint16_t)(1<<5));
+    GPIOA->PUPDR |= (0b01) << (5*2);
+    GPIOA->OSPEEDR |= (0b11) << (5*2);
+
+	int i;
+	int j;
+
+    while(1){
+    	i = 1;
+    	j = 1;
+    	GPIOA->ODR ^= (1<<5); //LEDka svieti
+    	for ( i=1; i<= 500; i++){
+    		for ( j=1; j<= 500; j++){
+    			}
+    		}
+    	GPIOA->ODR ^= (1<<5); //LEDka nesvieti
+    	i = 1;
+    	j = 1;
+    	for ( i=1; i<= 500; i++){
+    		for ( j=1; j<= 500; j++){
+    			}
+    		}
+    }
+ ///////////////////////////////////////////
   return 0;
 }
 
