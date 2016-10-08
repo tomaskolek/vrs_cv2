@@ -51,6 +51,21 @@ int main(void)
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
 
+    GPIO_InitTypeDef strukturaA;
+    strukturaA.GPIO_Mode = GPIO_Mode_OUT;
+    strukturaA.GPIO_OType = GPIO_OType_PP;
+    strukturaA.GPIO_PuPd = GPIO_PuPd_UP;
+    strukturaA.GPIO_Pin = GPIO_Pin_5;
+    strukturaA.GPIO_Speed = GPIO_Speed_40MHz;
+    GPIO_Init(GPIOA, &strukturaA);
+
+    GPIO_InitTypeDef strukturaC;
+    strukturaC.GPIO_Mode = GPIO_Mode_IN;
+    strukturaC.GPIO_PuPd = GPIO_PuPd_NOPULL;
+    strukturaC.GPIO_OType = GPIO_OType_PP;
+    strukturaC.GPIO_Pin = GPIO_Pin_13;
+    GPIO_Init(GPIOC, &strukturaC);
+
     GPIOA->MODER |= (0b01) << (5*2);
     GPIOA->OTYPER &= ~((uint16_t)(1<<5));
     GPIOA->PUPDR |= (0b01) << (5*2);
@@ -59,80 +74,38 @@ int main(void)
     GPIOC->OTYPER &= ~((uint16_t)(1<<13));
     GPIOC->PUPDR |= (0b00) << (13*2);
 
-  /**
-  *  IMPORTANT NOTE!
-  *  See the <system_*.c> file and how/if the SystemInit() function updates 
-  *  SCB->VTOR register. Sometimes the symbol VECT_TAB_SRAM needs to be defined 
-  *  when building the project if code has been located to RAM and interrupts 
-  *  are used. Otherwise the interrupt table located in flash will be used.
-  *  E.g.  SCB->VTOR = 0x20000000;  
-  */
-
-  /**
-  *  At this stage the microcontroller clock setting is already configured,
-  *  this is done through SystemInit() function which is called from startup
-  *  file (startup_stm32l1xx_hd.s) before to branch to application main.
-  *  To reconfigure the default setting of SystemInit() function, refer to
-  *  system_stm32l1xx.c file
-  */
-
-  /* TODO - Add your application code here */
-
 /////////   Uloha 1   /////////////////////////////////////////////
-/*
-  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
-  GPIOA->MODER |= (0b01) << (5*2);
-  GPIOA->OTYPER &= ~((uint16_t)(1<<5));
-  GPIOA->PUPDR |= (0b01) << (5*2);
-  GPIOA->OSPEEDR |= (0b11) << (5*2);
+/*	while(1){
+		GPIOA->ODR |= 0b0000000000100000; //LEDka svieti
+		GPIOA->ODR &= ~(0b0000000000100000); //LEDka nesvieti
+		GPIOA->BSRRL |= ((uint16_t)(1<<5)); //LEDka svieti
+		GPIOA->BSRRH |= ((uint16_t)(1<<5)); //LEDka nesvieti
 
-
-  GPIOA->ODR |= 0b0000000000100000; //LEDka svieti
-  GPIOA->ODR &= ~(0b0000000000100000); //LEDka nesvieti
-  GPIOA->BSRRL |= ((uint16_t)(1<<5)); //LEDka svieti
-  GPIOA->BSRRH |= ((uint16_t)(1<<5)); //LEDka nesvieti
-
-  GPIOA->ODR ^= (1<<5); //prepinam - mala by byt vypnuta
-  GPIOA->ODR ^= (1<<5); //prepinam - mala by svietit
-  GPIOA->ODR ^= (1<<5); // prepinam - vypnuta
-  GPIOA->ODR ^= (1<<5); // prepinam - svieti*/
+		GPIOA->ODR ^= (1<<5); //prepinam - mala by byt vypnuta
+		GPIOA->ODR ^= (1<<5); //prepinam - mala by svietit
+		GPIOA->ODR ^= (1<<5); // prepinam - vypnuta
+		GPIOA->ODR ^= (1<<5); // prepinam - svieti
+	}*/
+////////////////////////////////////////////////////////////////////
 
 /////////   Uloha 2   /////////////////////////////////////////////
-  	/*RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
-    GPIOC->MODER |= (0b00) << (13*2);
-    GPIOC->OTYPER &= ~((uint32_t)(1<<13));
-    GPIOC->PUPDR |= (0b00) << (13*2);
-
-    while(1){
+  	/*while(1){
     	i++;
   	 if ((GPIOC->IDR & (0b0010000000000000)) == 0)
   	   BUTTON = 1;
   	 else if ((GPIOC->IDR & (0b0010000000000000)) == (pow(2,13)))
   	   BUTTON = 0;
-
     }
 /////////////////////////////////////////////////////////////////*/
-  /// Uloha 1 s pouzitim kniznice /////////
-  /*RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
-  GPIO_InitTypeDef struktura;
-  struktura.GPIO_Mode = GPIO_Mode_OUT;
-  struktura.GPIO_OType = GPIO_OType_PP;
-  struktura.GPIO_PuPd = GPIO_PuPd_UP;
-  struktura.GPIO_Pin = GPIO_Pin_5;
-  struktura.GPIO_Speed = GPIO_Speed_40MHz;
-  GPIO_Init(GPIOA, &struktura);
-  while (1){
+
+///////////// Uloha 1 s pouzitim kniznice //////////////////////
+  /*while (1){
 	  GPIO_ToggleBits(GPIOA, GPIO_Pin_5);
   }*/
-  /////////////////////////////////////////////////////////////////*/
-  /// Uloha 2 s pouzitim kniznice /////////
-  /*RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
-  GPIO_InitTypeDef struktura;
-  struktura.GPIO_Mode = GPIO_Mode_IN;
-  struktura.GPIO_PuPd = GPIO_PuPd_NOPULL;
-  struktura.GPIO_OType = GPIO_OType_PP;
-  struktura.GPIO_Pin = GPIO_Pin_13;
-  while(1){
+//////////////////////////////////////////////////////////////////
+
+//////////////// Uloha 2 s pouzitim kniznice ////////////
+/*while(1){
 	  if ((GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13)) == 0){
 		  BUTTON = 1;
 	  }
@@ -141,14 +114,9 @@ int main(void)
 	  }
   }*/
 //////////////////////////////////////////////////////////////////////
- ///////////////    Uloha 3, prva cast  ////////////////////////////////////
-   /* RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
-    GPIOA->MODER |= (0b01) << (5*2);
-    GPIOA->OTYPER &= ~((uint16_t)(1<<5));
-    GPIOA->PUPDR |= (0b01) << (5*2);
-    GPIOA->OSPEEDR |= (0b11) << (5*2);
 
-	int i;
+///////////////    Uloha 3, prva cast  ////////////////////////////////////
+    /*int i;
 	int j;
 
     while(1){
@@ -166,30 +134,20 @@ int main(void)
     		for ( j=1; j<= 500; j++){
     			}
     		}
-    }
- ///////////////////////////////////////////
-  * */
-  //////////////////////////////////////////////////////////////////////
-   ///////////////    Uloha 3, druha cast  ////////////////////////////////////
-  /*RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
-  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
-      GPIOA->MODER |= (0b01) << (5*2);
-      GPIOA->OTYPER &= ~((uint16_t)(1<<5));
-      GPIOA->PUPDR |= (0b01) << (5*2);
-      GPIOA->OSPEEDR |= (0b11) << (5*2);
-      GPIOC->MODER |= (0b00) << (13*2);
-      GPIOC->OTYPER &= ~((uint32_t)(1<<13));
-      GPIOC->PUPDR |= (0b00) << (13*2);
+    }*/
+/////////////////////////////////////////////////////
 
-      while(1){
+///////////////    Uloha 3, druha cast  ////////////////////////////////////
+      /*while(1){
           	if ((GPIOC->IDR & (0b0010000000000000)) == 0)
         		 GPIOA->ODR |= 0b0000000000100000; //LEDka svieti
         	 else if ((GPIOC->IDR & (0b0010000000000000)) == (pow(2,13)))
         		 GPIOA->ODR &= ~(0b0000000000100000); //LEDka nesvieti
-          }
-*/
+          }*/
+/////////////////////////////////////////////////////////////
+
 ///////////////// Uloha 3, tretia cast //////////////////////////////////
-    int i, j = 0;
+ /* int i, j = 0;
     while(1){
     	 for (i = 0;i<=5;i++){
     		 if ((GPIOC->IDR & (0b0010000000000000)) == 0){
@@ -208,8 +166,51 @@ int main(void)
     			 }
     		 }
     	 }
-    }
-    ///////////////////////////////////////////////////////////////////
+    }*/
+///////////////////////////////////////////////////////////////////
+
+///////////  Uloha 3 - pouzita kniznica, cast 1 ////////////////////
+    /*int i, j;
+    while(1){
+    	GPIO_ToggleBits(GPIOA, GPIO_Pin_5);
+    	for (int i=1; i<= 500; i++){
+    		for (int j=1; j<= 500; j++){
+    		}
+    	}
+    }*/
+//////////////////////////////////////////////////////////////////////
+
+///////////  Uloha 3 - pouzita kniznica, cast 2 ////////////////////
+   /* while(1){
+    	if ((GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13)) == 0)
+    		GPIO_SetBits(GPIOA, GPIO_Pin_5); //LEDka svieti
+    	if ((GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13)) == 1)
+    		GPIO_ResetBits(GPIOA, GPIO_Pin_5); //LEDka nesvieti
+    }*/
+//////////////////////////////////////////////////////////////////////
+
+///////////  Uloha 3 - pouzita kniznica, cast 3 ////////////////////
+    int i, j = 0;
+        while(1){
+        	 for (i = 0;i<=5;i++){
+        		 if ((GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13)) == 0){
+        			 i++;
+        	 	  	 if (i>3){
+        	 	  		 BUTTON = 1;
+        	 	  	 }
+        	 	 }
+        	 }
+        	 if (BUTTON == 1){
+        		 if ((GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13)) == 1){
+        			 j++;
+        			 if (j>5){
+        				 GPIO_ToggleBits(GPIOA, GPIO_Pin_5);
+        				 BUTTON = 0;
+        			 }
+        		 }
+        	 }
+        }
+/////////////////////////////////////////////////////////////////////
   return 0;
 }
 
